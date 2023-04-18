@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "api"
+version = "0.1.0"
+description = ""
+authors = ["Shuya Kinjo <a8109058@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.95.1"
+uvicorn = "^0.21.1"
+taskipy = "^1.10.4"
+flake8 = "^6.0.0"
+black = "^23.3.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.taskipy.tasks]
+test = "pytest"
+docker-build = "docker build -t interactive-item-search-api ."
+docker-run = "docker run -d -p 8000:8000 -v $(pwd)/api:/api  interactive-item-search-api"
+dev = "poetry run uvicorn api.main:app --reload"
+fmt = "black api tests"
+lint = "flake8 api tests"
+lint-black = "black --check  api tests"
