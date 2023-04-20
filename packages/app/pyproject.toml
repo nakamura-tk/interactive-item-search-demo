@@ -6,7 +6,7 @@ authors = ["Shuya Kinjo <a8109058@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.8.12"
 fastapi = "^0.95.1"
 uvicorn = "^0.21.1"
 taskipy = "^1.10.4"

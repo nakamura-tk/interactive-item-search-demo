@@ -13,7 +13,7 @@ $ poetry shell
 ## Command
 
 ```
-# フォーマッタをかける
+# フォーマット
 $ poetry run task fmt
 
 # Lintチェック
@@ -41,5 +41,5 @@ $ poetry run task dev
 # イメージのビルド
 $ poetry run task docker-build
 # 起動
-$ poetry run task docker-dev
+$ poetry run task docker-run
 ```
