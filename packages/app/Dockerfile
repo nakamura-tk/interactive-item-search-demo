@@ -1,7 +1,7 @@
-FROM public.ecr.aws/docker/library/python:3.8.12-slim-buster
+FROM --platform=linux/amd64 public.ecr.aws/docker/library/python:3.9.16-slim-buster
 
 # Lambda Web Adapterをインストール
-COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.7.0 /lambda-adapter /opt/extensions/lambda-adapter
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.7.0-x86_64 /lambda-adapter /opt/extensions/lambda-adapter
 
 ENV PORT=8000
 

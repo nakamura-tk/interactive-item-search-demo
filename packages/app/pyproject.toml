@@ -6,7 +6,7 @@ authors = ["Shuya Kinjo <a8109058@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8.12"
+python = "^3.9.16"
 fastapi = "^0.95.1"
 uvicorn = "^0.21.1"
 taskipy = "^1.10.4"
@@ -21,7 +21,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.taskipy.tasks]
 test = "pytest"
 docker-build = "docker build -t interactive-item-search-api ."
-docker-run = "docker run -d -p 8000:8000 -v $(pwd)/api:/api  interactive-item-search-api"
+docker-run = "docker run -d -p 8000:8000 interactive-item-search-api"
 dev = "poetry run uvicorn api.main:app --reload"
 fmt = "black api tests"
 lint = "flake8 api tests"
