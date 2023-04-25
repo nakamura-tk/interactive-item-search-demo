@@ -3,7 +3,7 @@ import { Stack, StackProps } from "aws-cdk-lib";
 import { RestApi, LambdaIntegration } from "aws-cdk-lib/aws-apigateway";
 import { DockerImageFunction, DockerImageCode } from "aws-cdk-lib/aws-lambda";
 
-export class InteractiveItemSearchDemoStack extends Stack {
+export class InteractiveItemSearchDemoServerStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
@@ -12,7 +12,7 @@ export class InteractiveItemSearchDemoStack extends Stack {
       this,
       "InteractiveItemSearchLambda",
       {
-        code: DockerImageCode.fromImageAsset("../app"),
+        code: DockerImageCode.fromImageAsset("../server"),
       }
     );
 

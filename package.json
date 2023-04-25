@@ -1,0 +1,16 @@
+{
+  "name": "interactive-item-search-demo",
+  "version": "1.0.0",
+  "description": "",
+  "workspaces": [
+    "packages/infra",
+    "packages/web"
+  ],
+  "scripts": {
+    "deploy:server": "npm run cdk -w packages/infra -- deploy 'InteractiveItemSearchDemoServerStack'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joe-king-sh/interactive-item-search-demo.git"
+  }
+}
