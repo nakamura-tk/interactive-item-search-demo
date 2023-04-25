@@ -7,7 +7,8 @@
     "packages/web"
   ],
   "scripts": {
-    "deploy:server": "npm run cdk -w packages/infra -- deploy 'InteractiveItemSearchDemoServerStack'"
+    "deploy:server": "npm run cdk -w packages/infra -- deploy 'InteractiveItemSearchDemoServerStack'",
+    "deploy:web": "npm run cdk -w packages/infra -- deploy 'InteractiveItemSearchDemoWebStack'"
   },
   "repository": {
     "type": "git",
