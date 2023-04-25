@@ -1,0 +1,35 @@
+name: server-deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/server-deploy.yaml"
+      - "packages/infra/**"
+      - "packages/server/**"
+
+env:
+  AWS_ROLE_ARN: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE_ARN }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: ap-northeast-1
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "npm"
+      - run: npm i -g npm@9.6.0
+      - run: npm ci
+      - run: npm run build:web
+      - run: npm run deploy:server -- --require-approval never

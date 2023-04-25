@@ -7,11 +7,15 @@
     "packages/web"
   ],
   "scripts": {
+    "build:web": "npm run build -w packages/web",
     "deploy:server": "npm run cdk -w packages/infra -- deploy 'InteractiveItemSearchDemoServerStack'",
     "deploy:web": "npm run cdk -w packages/infra -- deploy 'InteractiveItemSearchDemoWebStack'"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/joe-king-sh/interactive-item-search-demo.git"
+  },
+  "volta": {
+    "node": "18.12.1"
   }
 }

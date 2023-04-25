@@ -20,7 +20,7 @@ export class InteractiveItemSearchDemoServerStack extends Stack {
     const api = new RestApi(this, "InteractiveItemSearchAPI", {
       deployOptions: {
         tracingEnabled: true,
-        stageName: "api",
+        stageName: "prod",
       },
       restApiName: "Interactive Item Search API",
     });

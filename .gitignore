@@ -125,4 +125,4 @@ dmypy.json
 .pyre/
 node_modules
 
-tmp
+tmp/
