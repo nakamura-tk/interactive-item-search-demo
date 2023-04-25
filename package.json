@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "build:web": "npm run build -w packages/web",
+    "build:infra": "npm run cdk -w packages/infra -- synth",
     "deploy:server": "npm run cdk -w packages/infra -- deploy 'InteractiveItemSearchDemoServerStack'",
     "deploy:web": "npm run cdk -w packages/infra -- deploy 'InteractiveItemSearchDemoWebStack'",
     "deploy:oidc": "npm run cdk -w packages/infra -- deploy 'InteractiveItemSearchDemoGHAOidcStack'",
