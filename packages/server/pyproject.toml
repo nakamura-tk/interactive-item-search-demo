@@ -12,6 +12,8 @@ uvicorn = "^0.21.1"
 taskipy = "^1.10.4"
 flake8 = "^6.0.0"
 black = "^23.3.0"
+pyyaml = "^6.0"
+requests = "^2.30.0"
 
 
 [build-system]
@@ -26,3 +28,4 @@ dev = "poetry run uvicorn api.main:app --reload"
 fmt = "black api tests"
 lint = "flake8 api tests"
 lint-black = "black --check  api tests"
+openapi = "python ./scripts/openapi2yaml.py"
