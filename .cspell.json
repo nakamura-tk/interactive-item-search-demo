@@ -1,3 +1,12 @@
 {
-  "words": ["oidc", "OIDC", "Oidc", "pydantic", "fastapi"]
+  "words": [
+    "boto",
+    "dotenv",
+    "fastapi",
+    "oidc",
+    "Oidc",
+    "OIDC",
+    "openai",
+    "pydantic"
+  ]
 }

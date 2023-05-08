@@ -2,5 +2,5 @@ POST http://127.0.0.1:8000/chat-messages/5e96093a-a4ca-403f-8c1a-0a97eeaa3cf2 HT
 Content-Type: application/json
 
 {
-  "message": "aaaaa"
+  "message": "初めての一人暮らしで必要なものを教えてください"
 }
