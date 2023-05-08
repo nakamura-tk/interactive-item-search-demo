@@ -1,5 +1,10 @@
-from fastapi import FastAPI
-from api.routes import chat_message, hello
+# ローカルでの動作確認用、本番はLambdaの環境変数から読み込む
+from dotenv import load_dotenv
+load_dotenv()
+
+from fastapi import FastAPI  # noqa: E402
+from api.routes import chat_message  # noqa: E402
+
 
 app = FastAPI(
     title="ゆるふわ商品検索Demo API",

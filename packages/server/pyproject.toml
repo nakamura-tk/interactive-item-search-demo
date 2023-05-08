@@ -14,6 +14,10 @@ flake8 = "^6.0.0"
 black = "^23.3.0"
 pyyaml = "^6.0"
 requests = "^2.30.0"
+ulid-py = "^1.1.0"
+openai = "^0.27.6"
+boto3 = "^1.26.129"
+python-dotenv = "^1.0.0"
 
 
 [build-system]

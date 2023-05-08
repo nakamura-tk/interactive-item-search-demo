@@ -6,6 +6,6 @@
   "python.linting.lintOnSave": true,
   "python.linting.flake8Args": [
     "--ignore=E203,W503,W504",
-    "--max-line-length=88"
+    "--max-line-length=120"
   ]
 }
