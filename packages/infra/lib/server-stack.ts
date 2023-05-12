@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { Stack, StackProps, RemovalPolicy } from "aws-cdk-lib";
+import { Stack, StackProps, RemovalPolicy, Duration } from "aws-cdk-lib";
 import { RestApi, LambdaIntegration } from "aws-cdk-lib/aws-apigateway";
 import { DockerImageFunction, DockerImageCode } from "aws-cdk-lib/aws-lambda";
 import { Table, AttributeType, BillingMode } from "aws-cdk-lib/aws-dynamodb";
@@ -12,7 +12,7 @@ export class InteractiveItemSearchDemoServerStack extends Stack {
     // Create the DynamoDB table
     const table = new Table(this, "InteractiveItemSearchTable", {
       partitionKey: { name: "session_id", type: AttributeType.STRING },
-      sortKey: { name: "sent_at", type: AttributeType.NUMBER },
+      sortKey: { name: "sent_at", type: AttributeType.STRING },
       billingMode: BillingMode.PAY_PER_REQUEST,
       removalPolicy: RemovalPolicy.DESTROY,
     });
@@ -22,7 +22,9 @@ export class InteractiveItemSearchDemoServerStack extends Stack {
       this,
       "InteractiveItemSearchLambda",
       {
-        code: DockerImageCode.fromImageAsset("../server"),
+        code: DockerImageCode.fromImageAsset("../server", {
+          file: "Dockerfile.amd64",
+        }),
         environment: {
           CHAT_MESSAGE_HISTORY_TABLE_NAME: table.tableName,
           OPENAI_API_KEY: fetchStringParameterValue({
@@ -34,8 +36,11 @@ export class InteractiveItemSearchDemoServerStack extends Stack {
             parameterName: "OPENAI_ORG_ID",
           }),
         },
+        timeout: Duration.seconds(28),
       }
     );
+
+    table.grantReadWriteData(lambda);
 
     // Create the API Gateway with Lambda proxy integration
     const api = new RestApi(this, "InteractiveItemSearchAPI", {

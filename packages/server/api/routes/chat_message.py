@@ -7,9 +7,10 @@ import os
 router = APIRouter()
 dynamodb = boto3.resource("dynamodb")
 CHAT_MESSAGE_HISTORY_TABLE_NAME = os.environ["CHAT_MESSAGE_HISTORY_TABLE_NAME"]
-chat_history_table = dynamodb.Table(CHAT_MESSAGE_HISTORY_TABLE_NAME) 
+chat_history_table = dynamodb.Table(CHAT_MESSAGE_HISTORY_TABLE_NAME)
 
 chat_service = ChatService(chat_history_table=chat_history_table)
+
 
 @router.post("/chat-messages/{session_id}", response_model=ChatMessageResponse)
 def post_chat_message(session_id: str, request: ChatMessageRequest):
