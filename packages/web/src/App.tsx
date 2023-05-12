@@ -52,7 +52,7 @@ function App() {
     setMessage("");
   };
 
-  const getAnswerMessage = async (value: string, chats: Chat[]) => {
+  const getAnswerMessage = async (message: string, chats: Chat[]) => {
     const session_id = "abc";
 
     const res = await fetch(urlJoin(url, `/chat-messages/${session_id}`), {
@@ -61,12 +61,12 @@ function App() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        message: value,
+        message,
       }),
     });
-    console.log("res", res);
 
     const json = await res.json();
+    console.log("json", json);
 
     const updatedChats: Chat[] = [...chats, { type: "answer", content: json }];
 
@@ -77,7 +77,7 @@ function App() {
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS>
       <Box className="bg-slate-200 min-h-screen flex items-center justify-center">
-        <div className="w-[600px]">
+        <Box className="w-[600px]">
           <header className="max-h-[10vh]">
             <Text
               className="text-2xl p-2 border items-center my-2"
@@ -89,15 +89,21 @@ function App() {
           <Box className="h-[75vh] overflow-auto">
             {chats.length > 0
               ? chats.map((chat, i) => {
+                  const commonStyle =
+                    "max-w-[220px] break-words w-fit rounded-md rounded-br-none  py-1 px-2 text-black";
                   return (
                     <Box key={`${i}:${chat}`} className="my-4 ">
                       {chat.type === "question" ? (
-                        <Text className="max-w-[220px] break-words w-fit rounded-md rounded-br-none  py-1 px-2 text-black bg-orange-100 ml-auto">
+                        <Text
+                          className={`${commonStyle} bg-orange-100 ml-auto`}
+                        >
                           {chat.message}
                         </Text>
                       ) : (
                         <>
-                          <Text className="max-w-[220px] break-words w-fit rounded-md rounded-tl-none py-1 px-2 text-black bg-cyan-200 mr-auto">
+                          <Text
+                            className={`${commonStyle} bg-cyan-200 mr-auto`}
+                          >
                             {chat.content.message}
                           </Text>
                           {chat.content.items.length > 0
@@ -136,7 +142,7 @@ function App() {
               送信
             </Button>
           </Box>
-        </div>
+        </Box>
       </Box>
     </MantineProvider>
   );
