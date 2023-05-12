@@ -9,8 +9,8 @@
   "scripts": {
     "build:web": "npm run build -w packages/web",
     "build:infra": "npm run cdk -w packages/infra -- synth",
-    "deploy:server": "npm run cdk -w packages/infra -- deploy 'InteractiveItemSearchDemoServerStack'",
-    "deploy:server:hotswap": "npm run cdk -w packages/infra -- deploy 'InteractiveItemSearchDemoServerStack' --hotswap",
+    "deploy:server": "npm run cdk -w packages/infra -- deploy 'InteractiveItemSearchDemoEcrStack' 'InteractiveItemSearchDemoServerStack'",
+    "deploy:server:hotswap": "npm run cdk -w packages/infra -- deploy 'InteractiveItemSearchDemoEcrStack' 'InteractiveItemSearchDemoServerStack' --hotswap",
     "deploy:web": "npm run cdk -w packages/infra -- deploy 'InteractiveItemSearchDemoWebStack'",
     "deploy:oidc": "npm run cdk -w packages/infra -- deploy 'InteractiveItemSearchDemoGHAOidcStack'",
     "spell-check": "cspell \"**/*.{js,jsx,ts,tsx,json,md}\""
@@ -24,5 +24,9 @@
   },
   "devDependencies": {
     "cspell": "6.31.1"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-apprunner-alpha": "2.79.1-alpha.0",
+    "cdk-docker-image-deployment": "0.0.248"
   }
 }

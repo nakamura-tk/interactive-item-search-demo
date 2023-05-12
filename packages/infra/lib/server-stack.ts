@@ -1,9 +1,16 @@
 import { Construct } from "constructs";
-import { Stack, StackProps, RemovalPolicy, Duration } from "aws-cdk-lib";
-import { RestApi, LambdaIntegration } from "aws-cdk-lib/aws-apigateway";
-import { DockerImageFunction, DockerImageCode } from "aws-cdk-lib/aws-lambda";
+import { Stack, StackProps, RemovalPolicy, CfnOutput } from "aws-cdk-lib";
+import {
+  Role,
+  ServicePrincipal,
+  PolicyStatement,
+  Effect,
+} from "aws-cdk-lib/aws-iam";
+import { Service, Source } from "@aws-cdk/aws-apprunner-alpha";
 import { Table, AttributeType, BillingMode } from "aws-cdk-lib/aws-dynamodb";
 import { fetchStringParameterValue } from "../util/ssm";
+import { imageTag, repositoryName } from "./constant";
+import { Repository } from "aws-cdk-lib/aws-ecr";
 
 export class InteractiveItemSearchDemoServerStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -17,44 +24,62 @@ export class InteractiveItemSearchDemoServerStack extends Stack {
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
-    // Create the Lambda function
-    const lambda = new DockerImageFunction(
+    const instanceRole = new Role(
       this,
-      "InteractiveItemSearchLambda",
+      "InteractiveItemSearchDemoServerInstanceRole",
       {
-        code: DockerImageCode.fromImageAsset("../server", {
-          file: "Dockerfile.amd64",
-        }),
-        environment: {
-          CHAT_MESSAGE_HISTORY_TABLE_NAME: table.tableName,
-          OPENAI_API_KEY: fetchStringParameterValue({
-            construct: this,
-            parameterName: "OPENAI_API_KEY",
-          }),
-          OPENAI_ORG_ID: fetchStringParameterValue({
-            construct: this,
-            parameterName: "OPENAI_ORG_ID",
-          }),
-        },
-        timeout: Duration.seconds(28),
+        assumedBy: new ServicePrincipal("tasks.apprunner.amazonaws.com"),
       }
     );
 
-    table.grantReadWriteData(lambda);
+    instanceRole.addToPolicy(
+      new PolicyStatement({
+        // QueryとPutItemを許可する
+        actions: ["dynamodb:Query", "dynamodb:PutItem"],
+        effect: Effect.ALLOW,
+        resources: [table.tableArn],
+      })
+    );
 
-    // Create the API Gateway with Lambda proxy integration
-    const api = new RestApi(this, "InteractiveItemSearchAPI", {
-      deployOptions: {
-        tracingEnabled: true,
-        stageName: "prod",
-      },
-      restApiName: "Interactive Item Search API",
-    });
+    const port = 8000;
+    const serverService = new Service(
+      this,
+      "InteractiveItemSearchDemoServerService",
+      {
+        source: Source.fromEcr({
+          imageConfiguration: {
+            port,
+            environmentVariables: {
+              OPENAI_API_KEY: fetchStringParameterValue({
+                construct: this,
+                parameterName: "OPENAI_API_KEY",
+              }),
+              OPENAI_ORG_ID: fetchStringParameterValue({
+                construct: this,
+                parameterName: "OPENAI_ORG_ID",
+              }),
+              CHAT_MESSAGE_HISTORY_TABLE_NAME: table.tableName,
+              PORT: port.toString(),
+              APP_VERSION: imageTag,
+            },
+          },
+          // @ts-expect-error
+          repository: Repository.fromRepositoryName(
+            this,
+            "ServerRepositoryFromName",
+            repositoryName
+          ),
+          tagOrDigest: imageTag,
+        }),
+        // @ts-expect-error
+        instanceRole: instanceRole,
+      }
+    );
 
-    // Create the proxy resource
-    api.root.addProxy({
-      anyMethod: true,
-      defaultIntegration: new LambdaIntegration(lambda),
+    new CfnOutput(this, "ServerServiceUrl", {
+      exportName: "InteractiveItemSearchDemoServerServiceUrl",
+      value: serverService.serviceUrl,
     });
   }
 }
+y;
