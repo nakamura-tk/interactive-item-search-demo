@@ -30,7 +30,7 @@ main への push で GitHubActions でデプロイします。
 
 #### OIDC 用 IAM ロールのデプロイ
 
-- GitHubACtions で使用する OIDC 用のロールを手動デプロイ
+- GitHubActions で使用する OIDC 用のロールを手動デプロイ
   - `npm run deploy:oidc`
 
 ### バックエンド(手動)
