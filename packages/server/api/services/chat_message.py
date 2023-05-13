@@ -132,8 +132,17 @@ class ChatService:
         ]
         messages.append({"role": Role.user, "content": user_message})
 
-        # 一番最初にシステムメッセージを挿入する
+        # 一番最初にシステムメッセージを挿入する(Roleはsystemよりuserの方が効くように感じる)
         messages.insert(0, {"role": Role.user, "content": self._get_initial_prompt()})
+
+        # 念押しで出力形式をリマインド
+        messages.append(
+            {
+                "role": Role.system,
+                "content": "AIアシスタントの応答は最初に指定した「出力形式」に従いJSONで応答してください",
+            }
+        )
+
         return messages
 
     def _get_initial_prompt(self):
@@ -167,7 +176,6 @@ AIチャットアシスタントの回答:
     "message": "もちろんです！何をお探しですか？",
     "keywords": []
 }
-
 
 """
 
