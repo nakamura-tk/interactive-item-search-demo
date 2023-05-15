@@ -1,6 +1,4 @@
 from pydantic import BaseModel
-from typing import Literal
-import uuid
 from enum import Enum
 
 
@@ -26,8 +24,8 @@ class Role(str, Enum):
 
 
 class ChatMessageHistory(BaseModel):
-    session_id: uuid.UUID
-    sent_at: int
-    message_id: uuid.UUID
+    session_id: str
+    sent_at: str
+    message_id: str
     role: Role
     message: str

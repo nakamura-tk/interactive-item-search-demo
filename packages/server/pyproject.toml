@@ -26,9 +26,11 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.taskipy.tasks]
 test = "pytest"
-docker-build = "docker build -t interactive-item-search-api ."
+docker-build = "docker build -f Dockerfile -t interactive-item-search-api ."
 docker-run = "docker run -d -p 8000:8000 interactive-item-search-api"
-dev = "poetry run uvicorn api.main:app --reload"
+docker-build-arm64 = "docker build -f Dockerfile.arm64  -t interactive-item-search-api-arm64 ."
+docker-run-arm64 = "docker run -d -p 8000:8000 interactive-item-search-api-arm64"
+dev = "poetry run uvicorn api.main:app --reload --log-level debug"
 fmt = "black api tests"
 lint = "flake8 api tests"
 lint-black = "black --check  api tests"

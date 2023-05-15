@@ -23,14 +23,14 @@ main への push で GitHubActions でデプロイします。
 
 #### SSM パラメーターストアの設定
 
-| キー                                         | 値  |
-| -------------------------------------------- | --- |
-| INTERACTIVE_ITEM_SEARCH_DEMO_OPEN_AI_API_KEY | TBD |
-| INTERACTIVE_ITEM_SEARCH_DEMO_OPEN_AI_ORG_KEY | TBD |
+| キー                                          | 値                  |
+| --------------------------------------------- | ------------------- |
+| /interactive-item-search-demo/OPEN_AI_API_KEY | <OPENAI の API KEY> |
+| /interactive-item-search-demo/OPEN_AI_ORG_ID  | <OPENAI の組織 ID>  |
 
 #### OIDC 用 IAM ロールのデプロイ
 
-- GitHubACtions で使用する OIDC 用のロールを手動デプロイ
+- GitHubActions で使用する OIDC 用のロールを手動デプロイ
   - `npm run deploy:oidc`
 
 ### バックエンド(手動)

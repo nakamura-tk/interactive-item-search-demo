@@ -1,4 +1,4 @@
-POST http://127.0.0.1:8000/chat-messages/5e96093a-a4ca-403f-8c1a-0a97eeaa3cf2 HTTP/1.1
+POST http://127.0.0.1:8000/chat-messages/9999234234 HTTP/1.1
 Content-Type: application/json
 
 {
