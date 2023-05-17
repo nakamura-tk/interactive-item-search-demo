@@ -8,35 +8,39 @@ import urlJoin from "url-join";
 import { url } from "./components/common";
 import { AnswerMessage, QuestionMessage } from "./types";
 
-const worker = setupWorker(
-  rest.post<QuestionMessage>(
-    urlJoin(url, "/chat-messages/:session_id"),
-    async (req, res, ctx) => {
-      const { message } = await req.json();
+const isMocked = false;
 
-      return res(
-        ctx.json({
-          items: [
-            {
-              description: "string",
-              id: "string",
-              image_url: "http://localhost:3000/images/sampleA.jpg",
-            },
-            {
-              description: "string",
-              id: "string",
-              image_url: "http://localhost:3000/images/sampleB.jpg",
-            },
-          ],
-          message: `answer:${message}${message}${message}${message}${message}${message}`,
-        } as AnswerMessage),
-        ctx.delay(2000)
-      );
-    }
-  )
-);
+if (isMocked) {
+  const worker = setupWorker(
+    rest.post<QuestionMessage>(
+      urlJoin(url, "/chat-messages/:session_id"),
+      async (req, res, ctx) => {
+        const { message } = await req.json();
 
-worker.start();
+        return res(
+          ctx.json({
+            items: [
+              {
+                description: "string",
+                id: "string",
+                image_url: "http://localhost:3000/images/sampleA.jpg",
+              },
+              {
+                description: "string",
+                id: "string",
+                image_url: "http://localhost:3000/images/sampleB.jpg",
+              },
+            ],
+            message: `answer:${message}${message}${message}${message}${message}${message}`,
+          } as AnswerMessage),
+          ctx.delay(2000)
+        );
+      }
+    )
+  );
+
+  worker.start();
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

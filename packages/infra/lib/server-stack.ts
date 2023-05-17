@@ -82,4 +82,3 @@ export class InteractiveItemSearchDemoServerStack extends Stack {
     });
   }
 }
-y;
