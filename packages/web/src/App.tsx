@@ -9,8 +9,9 @@ import {
   Textarea,
 } from "@mantine/core";
 import urlJoin from "url-join";
-import { url } from "./components/common";
+import { COOKIE_NAME, url } from "./components/common";
 import { AnswerMessage } from "./types";
+import { useCookies } from "react-cookie";
 
 type Chat =
   | {
@@ -32,8 +33,20 @@ function App() {
   const [message, setMessage] = useState<string>("");
   const [chats, setChats] = useState<Chat[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [cookie, setCookie] = useCookies([COOKIE_NAME]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  console.log("cookie", cookie[COOKIE_NAME]);
+
+  useEffect(() => {
+    console.log("cookie", cookie[COOKIE_NAME]);
+    if (!cookie[COOKIE_NAME]) {
+      // generate a semi random short id
+      const randomId = Math.random().toString(36).substring(7);
+      setCookie(COOKIE_NAME, randomId);
+    }
+  }, [cookie, setCookie]);
 
   const scrollToBottom = () => {
     if (messagesEndRef && messagesEndRef.current) {
@@ -53,7 +66,7 @@ function App() {
   };
 
   const getAnswerMessage = async (message: string, chats: Chat[]) => {
-    const session_id = "12345678";
+    const session_id = cookie[COOKIE_NAME];
 
     const res = await fetch(urlJoin(url, `/chat-messages/${session_id}`), {
       method: "POST",
