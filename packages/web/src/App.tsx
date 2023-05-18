@@ -142,6 +142,12 @@ function App() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               minRows={4}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && (e.metaKey || e.keyCode === 13)) {
+                  submitQuestion(message);
+                  setMessage("");
+                }
+              }}
             />
             <Button
               className="ml-3 disabled:bg-opacity-30 disabled:bg-blue-300"
