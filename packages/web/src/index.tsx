@@ -8,7 +8,7 @@ import urlJoin from "url-join";
 import { url } from "./components/common";
 import { AnswerMessage, QuestionMessage } from "./types";
 
-const isMocked = false;
+const isMocked = process.env.IS_MOCKED;
 
 if (isMocked) {
   const worker = setupWorker(
