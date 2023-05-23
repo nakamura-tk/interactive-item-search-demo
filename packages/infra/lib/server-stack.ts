@@ -5,9 +5,11 @@ import {
   ServicePrincipal,
   PolicyStatement,
   Effect,
+  ArnPrincipal
 } from "aws-cdk-lib/aws-iam";
 import { Service, Source } from "@aws-cdk/aws-apprunner-alpha";
 import { Table, AttributeType, BillingMode } from "aws-cdk-lib/aws-dynamodb";
+import { Domain, EngineVersion } from 'aws-cdk-lib/aws-opensearchservice';
 import { fetchStringParameterValue } from "../util/ssm";
 import { imageTag, repositoryName } from "./constant";
 import { Repository } from "aws-cdk-lib/aws-ecr";
@@ -75,6 +77,28 @@ export class InteractiveItemSearchDemoServerStack extends Stack {
         instanceRole: instanceRole,
       }
     );
+
+    const domain_name = 'item-search-domain'
+    const domain = new Domain(this, 'InteractiveItemSearchDomain', {
+      domainName: domain_name,
+      removalPolicy: RemovalPolicy.DESTROY,
+      version: EngineVersion.OPENSEARCH_2_3,
+      capacity: {
+        dataNodeInstanceType: 't3.small.search',
+        dataNodes: 1,
+      },
+      ebs: {
+        volumeSize: 10,
+      },
+      accessPolicies: [new PolicyStatement({
+        effect: Effect.ALLOW,
+        principals: [new ArnPrincipal(instanceRole.roleArn)],
+        actions: ['es:*'],
+        resources: [`arn:aws:es:${this.region}:${this.account}:domain/${domain_name}/*`]
+      })
+      ]
+    })
+    serverService.addEnvironmentVariable('OPENSEARCH_ENDPOINT', domain.domainEndpoint)
 
     new CfnOutput(this, "ServerServiceUrl", {
       exportName: "InteractiveItemSearchDemoServerServiceUrl",
