@@ -7,6 +7,8 @@ import {
   Box,
   Image,
   Textarea,
+  ActionIcon,
+  Loader,
 } from "@mantine/core";
 import urlJoin from "url-join";
 import { COOKIE_NAME, url } from "./components/common";
@@ -29,6 +31,9 @@ export async function sleep(msec: number): Promise<unknown> {
   });
 }
 
+const commonStyle =
+  "max-w-[385px] break-words w-fit rounded-xl  py-1 px-2 text-black shadow-xl";
+
 function App() {
   const [message, setMessage] = useState<string>("");
   const [chats, setChats] = useState<Chat[]>([]);
@@ -37,12 +42,8 @@ function App() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  console.log("cookie", cookie[COOKIE_NAME]);
-
   useEffect(() => {
-    console.log("cookie", cookie[COOKIE_NAME]);
     if (!cookie[COOKIE_NAME]) {
-      // generate a semi random short id
       const randomId = Math.random().toString(36).substring(7);
       setCookie(COOKIE_NAME, randomId);
     }
@@ -106,8 +107,6 @@ function App() {
           <Box className="h-[70vh] overflow-auto">
             {chats.length > 0
               ? chats.map((chat, i) => {
-                  const commonStyle =
-                    "max-w-[225px] break-words w-fit rounded-md rounded-br-none py-1 px-2 text-black";
                   return (
                     <Box key={`${i}:${chat}`} className="my-4 ">
                       {chat.type === "question" ? (
@@ -118,11 +117,21 @@ function App() {
                         </Text>
                       ) : (
                         <>
-                          <Text
-                            className={`${commonStyle} bg-cyan-200 mr-auto rounded-bl-none`}
-                          >
-                            {chat.content.message}
-                          </Text>
+                          <Box className="flex items-end">
+                            <ActionIcon
+                              className="bg-cyan-200 border-cyan-200"
+                              size="lg"
+                              mr="xs"
+                              radius="xl"
+                              variant="default"
+                            />
+
+                            <Text
+                              className={`${commonStyle} bg-cyan-200 mr-auto rounded-bl-none p-1`}
+                            >
+                              {chat.content.message}
+                            </Text>
+                          </Box>
                           <Box className="flex overflow-x-auto">
                             {chat.content.items.length > 0
                               ? chat.content.items.map((value) => {
@@ -146,9 +155,31 @@ function App() {
                   );
                 })
               : null}
+            {isLoading ? (
+              <Box className="flex items-end">
+                <ActionIcon
+                  className="bg-cyan-200 border-cyan-200"
+                  size="lg"
+                  mr="xs"
+                  radius="xl"
+                  variant="default"
+                />
+                <Text
+                  className={`${commonStyle} bg-cyan-200 mr-auto rounded-bl-none p-1`}
+                >
+                  検索中です。お待ちください
+                  <Loader
+                    size="xs"
+                    color="dark"
+                    variant="dots"
+                    className="mx-2"
+                  />
+                </Text>
+              </Box>
+            ) : null}
             <Box ref={messagesEndRef} />
           </Box>
-          <Box className="flex my-8 max-h-[20vh] items-center">
+          <Box className="flex my-4 max-h-[20vh] items-center">
             <Textarea
               placeholder="質問をどうぞ..."
               className="bg-blue-50 rounded-md w-full"

@@ -16,7 +16,7 @@ app = FastAPI(
 
 origins = [
     "http://localhost:3000",
-    "https://d273bt8q4fviwi.cloudfront.net",
+    "デプロイ環境URL",
 ]
 
 app.add_middleware(
