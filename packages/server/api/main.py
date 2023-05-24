@@ -1,4 +1,4 @@
-# ローカルでの動作確認用、本番はLambdaの環境変数から読み込む
+# ローカルでの動作確認用、本番はAppRunnerの環境変数から読み込む
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -16,7 +16,7 @@ app = FastAPI(
 
 origins = [
     "http://localhost:3000",
-    "デプロイ環境URL",
+    "https://d1lwticll4ra26.cloudfront.net",
 ]
 
 app.add_middleware(
