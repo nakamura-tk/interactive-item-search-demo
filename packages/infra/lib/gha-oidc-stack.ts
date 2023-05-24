@@ -25,7 +25,7 @@ export class InteractiveItemSearchDemoGHAOidcStack extends Stack {
           },
           StringLike: {
             ["token.actions.githubusercontent.com:sub"]:
-              "repo:joe-king-sh/interactive-item-search-demo:*",
+              "repo:cm-nb/interactive-item-search-demo:*",
           },
         }
       ),
