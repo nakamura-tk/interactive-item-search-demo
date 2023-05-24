@@ -7,6 +7,7 @@ from api.models.chat_message import (
     Role,
 )
 from boto3.dynamodb.conditions import Key
+from boto3.Session import Session
 import os
 import openai
 import logging
@@ -17,6 +18,7 @@ from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
 import traceback
 import json
 import re
+from opensearchpy import OpenSearch, RequestsHttpConnection, AWSV4SignerAuth
 
 logger = logging.getLogger("uvicorn")
 
@@ -183,18 +185,40 @@ AIチャットアシスタントの回答:
         """
         商品検索の仮実装
         """
-        return [
-            Item(
-                id="1",
-                description="デスク",
-                image_url="http://localhost:3000/images/sampleA.jpg",
-            ),
-            Item(
-                id="2",
-                description="ソファ",
-                image_url="http://localhost:3000/images/sampleB.jpg",
-            ),
-        ]
+
+        OPENSEARCH_ENDPOINT = os.environ["OPENSEARCH_ENDPOINT"]
+        credentials = Session().get_credentials()
+        auth = AWSV4SignerAuth(credentials, "ap-northeast-1")
+        client = OpenSearch(
+            hosts=[{"host": OPENSEARCH_ENDPOINT, "port": 9200}],
+            http_compress=True,
+            use_ssl=False,
+            http_auth=auth,
+            connection_class=RequestsHttpConnection,
+        )
+
+        query = {
+            "size": 5,
+            "_source": ["product_id", "title", "image_url"],
+            "query": {
+                "multi_match": {
+                    "query": " ".join(keywords),
+                    "fields": ["title", "description", "feature", "brand"],
+                }
+            },
+        }
+        response = client.search(body=query, index="items")
+
+        items = []
+        for result in response["hits"]["hits"]:
+            items.append(
+                Item(
+                    id=result["_source"]["product_id"],
+                    description=result["_source"]["title"],
+                    image_url=result["_source"]["image_url"],
+                )
+            )
+        return items
 
     def _extract_json(self, str_contains_json: str):
         """

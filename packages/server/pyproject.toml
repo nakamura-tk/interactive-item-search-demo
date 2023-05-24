@@ -18,6 +18,7 @@ ulid-py = "^1.1.0"
 openai = "^0.27.6"
 boto3 = "^1.26.129"
 python-dotenv = "^1.0.0"
+opensearch-py = "^2.2.0"
 
 
 [build-system]
