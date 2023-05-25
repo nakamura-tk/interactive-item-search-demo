@@ -194,6 +194,7 @@ AIチャットアシスタントの回答:
             http_compress=True,
             use_ssl=True,
             http_auth=auth,
+            verify_certs=True,
             connection_class=RequestsHttpConnection,
         )
 
