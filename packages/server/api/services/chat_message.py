@@ -192,7 +192,7 @@ AIチャットアシスタントの回答:
         client = OpenSearch(
             hosts=[{"host": OPENSEARCH_ENDPOINT, "port": 9200}],
             http_compress=True,
-            use_ssl=False,
+            use_ssl=True,
             http_auth=auth,
             connection_class=RequestsHttpConnection,
         )
