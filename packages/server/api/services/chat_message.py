@@ -207,6 +207,7 @@ AIチャットアシスタントの回答:
                 }
             },
         }
+        logger.info(f"request opensearch. query = {query}")
         response = client.search(body=query, index="items")
 
         items = []
