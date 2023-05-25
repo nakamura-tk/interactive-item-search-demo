@@ -6,6 +6,7 @@ from api.models.chat_message import (
     ChatMessageHistory,
     Role,
 )
+from boto3.session import Session
 from boto3.dynamodb.conditions import Key
 import os
 import openai
@@ -184,10 +185,9 @@ AIチャットアシスタントの回答:
         """
         商品検索の仮実装
         """
-        session = boto3.Session()
 
         OPENSEARCH_ENDPOINT = os.environ["OPENSEARCH_ENDPOINT"]
-        credentials = session.get_credentials()
+        credentials = Session().get_credentials()
         auth = AWSV4SignerAuth(credentials, "ap-northeast-1")
         client = OpenSearch(
             hosts=[{"host": OPENSEARCH_ENDPOINT, "port": 9200}],
