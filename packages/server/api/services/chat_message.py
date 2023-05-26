@@ -190,7 +190,7 @@ AIチャットアシスタントの回答:
         credentials = Session().get_credentials()
         auth = AWSV4SignerAuth(credentials, "ap-northeast-1")
         client = OpenSearch(
-            hosts=[{"host": OPENSEARCH_ENDPOINT, "port": 9200}],
+            hosts=[{"host": OPENSEARCH_ENDPOINT, "port": 443}],
             http_compress=True,
             use_ssl=True,
             http_auth=auth,
